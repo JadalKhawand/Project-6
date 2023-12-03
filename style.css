@@ -1,0 +1,38 @@
+*{
+  margin: 0;
+  padding: 0;
+  
+}
+.container, .notes-container,
+form {
+  height: 100%;
+  width: 100%;
+  max-width: 500px;
+  max-height: 700px;
+
+  border: 1px solid red;
+}
+/* body{
+  background-color: black;
+} */
+
+@media screen and (max-width: 800px) {
+  form {
+    display: none;
+  }
+
+  .show-form {
+    background-color: blue;
+    display: unset;
+  }
+}
+button {
+  position: absolute;
+  right: 45px;
+  bottom: 45px;
+  background-color: blue;
+}
+
+.notes{
+  z-index: 10;
+}
