@@ -1,132 +1,178 @@
-let notesContainer = document.querySelector(".notes-container");
-let notes = [
-  {
-    id: "1",
-    content: "Lorem ipsum dolor sit amet consectetur adipisi.",
-    priority: 1,
-    category: "home",
-    profile: "profile.jpeg",
-  },
+let categoryToClassesMap = {
+  home:"bg-red-200",
+  hobbies:"bg-green-200",
+  work:"bg-yellow-200"
+};
 
-];
+let notesContainer = document.querySelector('.notes-container');
+let notes = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem('notes')) : [];
 
-updateUINotesContainer(notes);
-function updateUINotesContainer(noteItem) {
-  notesContainer.innerHTML = ""
-  noteItem.forEach(function (noteItems) {
-    let noteHTML = generateNoteHTML(noteItems);
+updateNotesArray(notes)
+function updateUINotesContainer(notesToDisplay = null) {
+  notesToDisplay = notesToDisplay || notes
+  notesContainer.innerHTML = ''
+  notesToDisplay.forEach(function (noteItem) {
+    let noteHTML = generatNoteHTML(noteItem);
     notesContainer.innerHTML += noteHTML;
   });
 }
-function generateNoteHTML(noteItem) {
+
+function generatNoteHTML(noteItem) {
   return `
-  <div class="flex gap-5 items-center relative">
-    <div class="image h-10 w-10 overflow-hidden text-white">
-      <img src="${noteItem.profile}" />
-    </div>
-    <p>${noteItem.content}</p>
-    <span onclick="removeFromList('${noteItem.id}')" class="absolute top-0 right-2 rounded-full p-3 bg-white text-black cursor-pointer">X</span>
+  <div class="flex items-center ${categoryToClassesMap[noteItem.category]} gap-5 p-4 rounded-md bg-gray-200 relative">
+      <div class="h-12 w-12 overflow-hidden rounded-full">
+          <img src="${noteItem.profile}" alt="" />
+      </div>
+      <p>${noteItem.content}</p>
+      <div class="actions absolute top-4 right-4 flex gap-3">
+        <p class="rounded-full h-8 w-8 p-3 bg-white flex justify-center items-center cursor-pointer">
+          <span onclick="editNote('${noteItem.id}')"> edit </span>
+        </p>
+        <p class="rounded-full h-8 w-8 p-3 bg-white flex justify-center items-center cursor-pointer">
+          <span onclick="deleteNote('${noteItem.id}')">X</span>
+        </p>
+      </div>
   </div>
   `;
 }
-// updateUINotesContainer(generateNoteHTML(noteItem));
 
-function handleUserInput() {
-  let allInputsValid = true;
-  if (!validateContent()) {
-    allInputsValid = false;
-  }
-  if(!validatePriority()){
-    allInputsValid = false
-  }
-  if(!validateCategory()){
-    allInputsValid = false
-  }
-  if (allInputsValid) {
-    submitToBackend();
-  }
-}
-function submitToBackend() {
-  let content = document.querySelector("#content").value;
-  let selectedPriority = validatePriority();
-  let selectedCategory = document.querySelector('#category').value;
-  let currentId = notes.length
-  
-  let newNote = {
-    id: String(++currentId), 
-    content: content,
-    priority: parseInt(selectedPriority),
-    category: selectedCategory,
-    profile: "profile.jpeg", 
-  };
-
-  
-  notes.push(newNote);
-  notes = sortPriorityeDesc(notes)
-  updateUINotesContainer(notes)
-}
-function validateContent() {
-  let content = document.querySelector("#content");
-  if (!content.value) {
-    document.querySelector("#content-error").classList.remove("hidden");
-    return false;
-  }
-  document.querySelector("#content-error").classList.add("hidden");
-  return true;
-}
-function validatePriority() {
-  let priorityInputs = document.getElementsByName('PriorityInput')
-  let selectedPriority = null
-  for(let i=0;i<priorityInputs.length;i++)
-  {
-    if(priorityInputs[i].checked){
-      selectedPriority = priorityInputs[i].id;
-      break
+function deleteNote(noteID){
+  let newNotes = notes.filter(function(note){
+    // if same ID that we want to delete, return false
+    if(noteID === note.id){
+      return false;
+    } else {
+      return true;
     }
-  }
-  if (!selectedPriority) {
-    document.querySelector("#priority-error").classList.remove("hidden");
-    return null;
-  }
-  document.querySelector("#priority-error").classList.add("hidden");
-  return selectedPriority;
+  })
+  updateNotesArray(newNotes)
 }
 
-function validateCategory(){
+let textAreaInput = document.querySelector('textarea')
+let textAreaInputError = document.querySelector('#text-area-error')
 
 let categoryInput = document.querySelector('#category')
-if(!categoryInput.value){
-  document.querySelector('#category-error').classList.remove('hidden');
-  return false;
-}
-document.querySelector('#category-error').classList.add('hidden');
-return true;
-}
-function removeFromList(noteId) {
-  const noteIndex = notes.findIndex(note => note.id === noteId);
+let categoryInputError = document.querySelector('#category-input-error')
 
-  if (noteIndex !== -1) {
-    notes.splice(noteIndex, 1);
-
+function addNote(){
+  let contentValid = validateTextAreaInput();
+  let priorityValid = validatePriorityInput();
+  let categoryValid = validateCategoryInput();
+  // validate user inputs
+  if(contentValid &&  priorityValid && categoryValid){
+    let priorityInputValue = document.querySelector('input[name="priority"]:checked').value
+    let newNote = {
+      id : noteBeingEdited?.id ? noteBeingEdited.id : generateNoteID(),
+      profile: 'profile.webp'
+    };
+    newNote.content = textAreaInput.value
+    newNote['priority'] = priorityInputValue
+    newNote['category'] = categoryInput.value
     
-    updateUINotesContainer(notes);
-
+    // push to notes array
+    updateNotesArray([...notes, newNote]);
+    populateFormInputs();
   }
-  else 
-    console.log("failed")
-}
-function sortPriorityeAsc(notesItems) {
-  let sortedArr = notesItems.sort(function (prod1, prod2) {
-    return prod1.priority - prod2.priority;
-  });
-
-  return sortedArr;
+  
 }
 
-function sortPriorityeDesc(notesItems) {
-  let sortedArr = notesItems.sort(function (prod1, prod2) {
-    return prod2.priority - prod1.priority;
-  });
+function generateNoteID(){
+  // We can use Math.random()
+  return Date.now().toString();
+}
 
-  return sortedArr;
+function validateTextAreaInput (){
+  if(!textAreaInput.value){
+    textAreaInputError.classList.remove('hidden')
+    return false;
+  }
+  textAreaInputError.classList.add('hidden')
+  return true;
+}
+
+function validatePriorityInput(){
+  let priorityInputValue = document.querySelector('input[name="priority"]:checked')?.value
+  let priorityInputError = document.querySelector('#priority-input-error')
+  if(!priorityInputValue){
+    priorityInputError.classList.remove('hidden')
+    return false;
+  }
+  priorityInputError.classList.add('hidden')
+  return true;
+}
+
+function validateCategoryInput(){
+  if(!categoryInput.value){
+    categoryInputError.classList.remove('hidden')
+    return false;
+  }
+  categoryInputError.classList.add('hidden')
+  return true;
+}
+
+let noteBeingEdited;
+function editNote (noteID){
+  // get note
+  noteBeingEdited = notes.find(function(note){
+    return noteID === note.id
+  })
+  if(!noteBeingEdited){
+    return;
+  }
+  
+  // remove from notes array
+  deleteNote(noteID)
+  
+  // populate in inputs
+  populateFormInputs(noteBeingEdited)
+}
+
+function populateFormInputs(noteObject = {}){
+  // content
+  textAreaInput.value = noteObject.content || '';
+  // priority
+  // document.querySelectorAll('input[type=radio]')[4].value
+  document.querySelectorAll('input[name="priority"]').forEach(function(radioInput){
+    if(radioInput.value == noteObject.priority){
+      radioInput.checked = true;
+    } else {
+      radioInput.checked = false;
+    }
+  })
+  
+  // category
+  categoryInput.value = noteObject.category || ''
+  
+}
+
+function updateNotesArray (notesArray=[]){
+  notes = notesArray
+  localStorage.setItem('notes', JSON.stringify(notes))
+  // reflect changes to UI
+  // never call outside of this function
+  updateUINotesContainer();
+}
+
+function sortNotesAsc(){
+  let sortedNotesArray = notes.sort(function(a,b){
+    return a.priority-b.priority
+  })
+  updateNotesArray(sortedNotesArray)
+}
+function sortNotesDesc(){
+  let sortedNotesArray = notes.sort(function(a,b){
+    return b.priority-a.priority
+  })
+  updateNotesArray(sortedNotesArray)
+}
+
+function filterNotesByCategory(){
+  let filteredArray = notes.filter(function(noteItem){
+    if(!this.event.target.value || noteItem.category == this.event.target.value){
+      return true;
+    }
+    return false;
+  })
+  
+  updateUINotesContainer(filteredArray)
 }

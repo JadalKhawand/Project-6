@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <title>Avatar</title>
+</head>
+<style>
+  body {
+    height: 100vh;
+  }
+</style>
+
+<body>
+
+  <div class="container">
+    <header>
+      <h1 class="text-center text-3xl font-bold mb-6">Avatars</h1>
+    </header>
+    <h2 class="mt-20 ml-20 text-3xl font-bold mb-6">please choose your Avatar: </h2>
+    <div class="imageContainer">
+
+    </div>
+
+  </div>
+
+
+
+    <div class="avatarImages">
+      
+
+    </div>
+
+
+  <script>
+    let images = [
+      {
+        id: "avatar1",
+        img: 'images/1.jpg',
+      },
+      {
+        id: "avatar2",
+        img: 'images/2.png',
+      },
+      {
+        id: "avatar3",
+        img: 'images/3.png',
+      },
+      {
+        id: "avatar4",
+        img: 'images/4.png',
+      },
+    ]
+    function updateUINotesContainer(notesToDisplay = null) {
+      notesToDisplay = notesToDisplay || notes
+      imageContainer.innerHTML = ''
+      notesToDisplay.forEach(function (noteItem) {
+        let noteHTML = generateAvatarImages(noteItem);
+        imageContainer.innerHTML += noteHTML;
+      });
+    }
+    function generateAvatarImages(){
+      return `
+      
+      
+      `
+
+    }
+
+  </script>
+</body>
+
+</html>

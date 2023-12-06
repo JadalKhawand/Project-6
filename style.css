@@ -1,20 +1,15 @@
-*{
-  margin: 0;
-  padding: 0;
-  
-}
-.container, .notes-container,
+.notes,
 form {
   height: 100%;
   width: 100%;
   max-width: 500px;
-  max-height: 700px;
-
+  min-width: 400px;
   border: 1px solid red;
 }
-/* body{
-  background-color: black;
-} */
+
+.show-form {
+  display: none;
+}
 
 @media screen and (max-width: 800px) {
   form {
@@ -22,17 +17,16 @@ form {
   }
 
   .show-form {
-    background-color: blue;
+    position: absolute;
+    background-color: greenyellow;
+    top: 100px;
+    right: 50px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    font-size: x-large;
+    cursor: pointer;
+    border-radius: 50%;
     display: unset;
   }
-}
-button {
-  position: absolute;
-  right: 45px;
-  bottom: 45px;
-  background-color: blue;
-}
-
-.notes{
-  z-index: 10;
 }

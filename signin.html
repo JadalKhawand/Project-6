@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <title>sign in</title>
+</head>
+<style>
+  body{
+    height: 100vh;
+    background: linear-gradient(#add8e6, #4169e1);
+  }
+</style>
+
+<body class="flex justify-center items-center relative">
+
+  <header class="absolute top-4 left-6">
+    <img src="notes.png" alt="notes image"
+    height="45px" 
+    width="45px">
+  </header>
+
+<div class="container flex flex-col items-center gap-5 h-96 w-72 justify-center">
+  <h2 class="text-4xl my-4 font-bold"> Note App</h2>
+  <h1 class="text-3xl">Sign In</h1>
+  
+  <form class="flex flex-col justify-between gap-3">
+      <label for="username" class="font-semibold">Username:</label>
+      <input type="text" id="username" name="username" >
+      <p id="Username-error" class="hidden text-red-500">Please enter a Username more than 3 characters</p>
+
+      <label for="password" class="font-semibold">Password:</label>
+      <input type="password" id="password" name="password"> 
+      <p id="Password-error" class="hidden text-red-500">Please enter a Password more than 7 characters</p>
+
+      <button onclick="signIn()" type="button" class="bg-blue-500 text-white">Sign In</button>
+      
+      
+  </form>
+</div>
+  <script>
+
+    
+function handleSignIn() {
+  let allInputsValid = true;
+
+  allInputsValid = allInputsValid && validateUserName();
+  allInputsValid = allInputsValid && validatePassword();
+
+  return allInputsValid;
+}
+
+function validateUserName() {
+  let UserNameInputElement = document.querySelector("#username");
+
+  if (!UserNameInputElement.value) {
+    document.querySelector("#Username-error").classList.remove("hidden");
+    return false;
+  }
+    
+  if (UserNameInputElement.value.length < 3) {
+    document.querySelector("#Username-error").classList.remove("hidden");
+    return false;
+  }
+
+  document.querySelector("#Username-error").classList.add("hidden");
+  return true;
+
+}
+function validatePassword(){
+  let PasswordInputElement = document.querySelector("#password")
+  if (!PasswordInputElement.value) {
+    document.querySelector("#Password-error").classList.remove("hidden")
+    return false
+}
+if(PasswordInputElement.value.length<7){
+  document.querySelector("#Password-error").classList.remove("hidden")
+return false
+  
+}
+document.querySelector("#Password-error").classList.add("hidden")
+return true
+
+
+}
+function signIn(){
+    let usernameInput = document.querySelector('#username')
+    let passwordInput = document.querySelector('#password')
+    let ValidInput = handleSignIn()
+    if(ValidInput==true)
+      window.location.href = "avatar.html"
+    
+  }
+  </script>
+</body>
+</html>

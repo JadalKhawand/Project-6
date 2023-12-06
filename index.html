@@ -1,68 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <title>Note App</title>
-</head>
-
-
-<body class="bg-black text-white">
-
-  <main class="flex justify-center items-center flex-wrap h-screen gap-10 p-4 relative">
-
-
-    <div class="notes-container p-4 flex flex-col gap-12 relative overflow-scroll">
-      <div class="notes rounded-md shadow-md-2xl text-white bg-gray-800 absolute">
-        <h1 class="text-white">Notes</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <title>Notes App</title>
+  </head>
+  <body>
+    <main class="bg-gray-200 flex justify-center items-center h-screen gap-4 p-20 relative">
+      <div class="notes p-4 rounded-md shadow-2xl bg-white">
+        <span class="flex justify-between">
+          <h1 class="text-xl mb-4">Notes</h1>
+          <div class="filters">
+            <select onchange="filterNotesByCategory()" name="category-filter" id="category-filter">
+              <option value="">All</option>
+              <option value="home">Home</option>
+              <option value="hobbies">Hobbies</option>
+              <option value="work">Work</option>
+            </select>
+          </div>
+        </span>
+        <div class="notes-container flex flex-col gap-5"></div>
       </div>
+      <form class="rounded-md shadow-2xl bg-white p-4">
+        <textarea class="border-2 rounded-md w-full bg-gray-200" name="" id="" cols="30" rows="10"></textarea>
+        <p id="text-area-error" class="hidden text-red-500">Please add some content!</p>
+        <!-- note content -->
+        <!-- note priority 1-5 -->
+        <div class="flex flex-col">
+          <style>
+            input[type='radio'] {
+              max-width: 50px;
+              display: inline;
+            }
+          </style>
+          <h1 class="text-xl my-4">Priority</h1>
+          <div class="radio-input">
+            <input type="radio" id="priority-1" name="priority" value="1" />
+            <label for="priority-1">Very Low</label>
+          </div>
+          <div class="radio-input"><input type="radio" id="priority-2" name="priority" value="2" /> <label for="priority-2">Low</label></div>
+          <div class="radio-input"><input type="radio" id="priority-3" name="priority" value="3" /> <label for="priority-3">Medium</label></div>
+          <div class="radio-input"><input type="radio" id="priority-4" name="priority" value="4" /> <label for="priority-4">High</label></div>
+          <div class="radio-input"><input type="radio" id="priority-5" name="priority" value="5" /> <label for="priority-5">Very High</label></div>
+          <p id="priority-input-error" class="hidden text-red-500">Please pick a priority!</p>
+        </div>
+        <!-- note category -->
+        <h1 class="text-xl my-4">Category</h1>
+        <div>
+          <select name="category" id="category">
+            <option value="">Select Category</option>
+            <option value="home">Home</option>
+            <option value="hobbies">Hobbies</option>
+            <option value="work">Work</option>
+          </select>
+          <p id="category-input-error" class="hidden text-red-500" >Please select a category!</p>
+        </div>
+
+        <button onclick="addNote()" class="bg-green-200 p-2 rounded-md" type="button">Add Note</button>
+      </form>
+    </main>
+    <script src="script.js">
       
       
-
-
-    </div>
-    <form class="p-16 flex flex-col relative">
-      <!-- note content -->
-      <div class="contentdiv">
-        <label for="content">Content:</label>
-        <textarea id="content" name="userNote" rows="4" cols="50" class="overflow-scroll text-black"></textarea>
-        <p id="content-error" class="hidden text-red-500 mt-4">Please enter note content</p>
-      </div>
-      <!-- note priority 1-5 -->
-      <div id="priorityForm" class="my-4">
-        <label for="priority">Priority:</label> <br>
-
-        <input class="priority" type="radio" name="PriorityInput" id="1">1<br>
-        <input class="priority" type="radio" name="PriorityInput" id="2">2<br>
-        <input class="priority" type="radio" name="PriorityInput" id="3">3<br>
-        <input class="priority" type="radio" name="PriorityInput" id="4">4<br>
-        <input class="priority" type="radio" name="PriorityInput" id="5">5<br>
-      </div>
-      <p id="priority-error" class="hidden text-red-500 mb-4">Please enter a priority</p>
-      <!-- note category -->
-      <div class="notediv">
-        <label for="category">Category: </label>
-        <select name="category" id="category" class="text-black border-2 border-black">
-          <option value="" disabled selected>Select a category</option>
-          <option value="home">Home</option>
-          <option value="hobbies">Hobbies</option>
-          <option value="work">Work</option>
-        </select>
-      </div>
-      <p id="category-error" class="hidden text-red-500 mt-4">Please select a category</p>
-      <button onclick="handleUserInput()" class="bg-black-200 p-2 cursor-pointer" type="button">SUBMIT</button>
-    </form>
-  </main>
-
-
-
-
-  <script src="script.js"></script>
-</body>
-
+    </script>
+  </body>
 </html>
