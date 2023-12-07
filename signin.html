@@ -13,6 +13,7 @@
     height: 100vh;
     background: linear-gradient(#add8e6, #4169e1);
   }
+  
 </style>
 
 <body class="flex justify-center items-center relative">
@@ -23,24 +24,25 @@
     width="45px">
   </header>
 
-<div class="container flex flex-col items-center gap-5 h-96 w-72 justify-center">
-  <h2 class="text-4xl my-4 font-bold"> Note App</h2>
-  <h1 class="text-3xl">Sign In</h1>
-  
+<!-- Add these classes directly to your HTML elements -->
+
+<div class="container flex flex-col items-center gap-5 h-96 justify-center p-8">
+  <h2 class="text-5xl my-4 font-bold"> Note App</h2>
+  <h1 class="text-4xl mb-6">Sign In</h1>
+
   <form class="flex flex-col justify-between gap-3">
-      <label for="username" class="font-semibold">Username:</label>
-      <input type="text" id="username" name="username" >
-      <p id="Username-error" class="hidden text-red-500">Please enter a Username more than 3 characters</p>
+    <label for="username" class="font-semibold text-lg">Username:</label>
+    <input type="text" id="username" name="username" class="p-3 w-72">
+    <p id="Username-error" class="hidden text-red-500 text-sm">Please enter a Username more than 3 characters</p>
 
-      <label for="password" class="font-semibold">Password:</label>
-      <input type="password" id="password" name="password"> 
-      <p id="Password-error" class="hidden text-red-500">Please enter a Password more than 7 characters</p>
+    <label for="password" class="font-semibold text-lg">Password:</label>
+    <input type="password" id="password" name="password" class="p-3 text-base">
+    <p id="Password-error" class="hidden text-red-500 text-sm">Please enter a Password more than 7 characters</p>
 
-      <button onclick="signIn()" type="button" class="bg-blue-500 text-white">Sign In</button>
-      
-      
+    <button onclick="signIn()" type="button" class="bg-blue-500 text-white px-8 py-4 text-lg">Sign In</button>
   </form>
 </div>
+
   <script>
 
     
@@ -86,14 +88,22 @@ return true
 
 
 }
-function signIn(){
-    let usernameInput = document.querySelector('#username')
-    let passwordInput = document.querySelector('#password')
-    let ValidInput = handleSignIn()
-    if(ValidInput==true)
-      window.location.href = "avatar.html"
-    
+
+  function signIn() {
+    let usernameInput = document.querySelector('#username');
+    let passwordInput = document.querySelector('#password');
+    let ValidInput = handleSignIn();
+
+    if (ValidInput) {
+      // Store username in local storage
+      localStorage.setItem('username', usernameInput.value);
+
+      // Redirect to the avatar.html page
+      window.location.href = 'avatar.html';
+    }
   }
+
+
   </script>
 </body>
 </html>

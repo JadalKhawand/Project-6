@@ -12,6 +12,13 @@
 <style>
   body {
     height: 100vh;
+
+    background-image: url(images/backimage.jpg);
+    overflow: hidden;
+    background-size: cover;
+  }
+  .imageAvat.selected {
+    border: 2px solid black;
   }
 </style>
 
@@ -22,18 +29,18 @@
       <h1 class="text-center text-3xl font-bold mb-6">Avatars</h1>
     </header>
     <h2 class="mt-20 ml-20 text-3xl font-bold mb-6">please choose your Avatar: </h2>
-    <div class="imageContainer">
+    <br>
+    <div class="imageContainer flex justify-center gap-5 ">
 
     </div>
-
+    <div class="button text-center mt-8 mx-auto">
+      <button onclick="signIn()" type="button" class="bg-blue-500 text-white px-8 py-4 text-lg">Submit</button>
+    </div>
   </div>
 
 
 
-    <div class="avatarImages">
-      
 
-    </div>
 
 
   <script>
@@ -52,25 +59,85 @@
       },
       {
         id: "avatar4",
-        img: 'images/4.png',
+        img: 'images/44.png',
       },
+      {
+        id: "avatar4",
+        img: 'images/5.png',
+      },
+
     ]
-    function updateUINotesContainer(notesToDisplay = null) {
-      notesToDisplay = notesToDisplay || notes
+    let selectedAvatar = null;
+    let imageContainer = document.querySelector(".imageContainer")
+    function updateUINotesContainer(imagesToDisplay = null) {
+      imagesToDisplay = imagesToDisplay || images
       imageContainer.innerHTML = ''
-      notesToDisplay.forEach(function (noteItem) {
-        let noteHTML = generateAvatarImages(noteItem);
+      imagesToDisplay.forEach(function (image) {
+        let noteHTML = generateAvatarImages(image);
         imageContainer.innerHTML += noteHTML;
       });
+      const avatars = document.querySelectorAll(".imageAvat");
+      avatars.forEach(addEventHandler);
     }
-    function generateAvatarImages(){
+    function generateAvatarImages(image) {
       return `
       
+      <div class="avatarImage">
+      <img src="${image.img}" id="${image.id}" alt="avatar picture"
+      height="144px"
+      width="144px"
+      class="imageAvat rounded-full cursor-pointer">
+
+    </div>
       
       `
 
     }
+    updateUINotesContainer()
+    
+    function addEventHandler(htmlElement) {
+    htmlElement.addEventListener("click", function () {
+      if (selectedAvatar) {
+        selectedAvatar.classList.remove("selected");
+      }
 
+      htmlElement.classList.add("selected");
+      selectedAvatar = htmlElement;
+      selectedAvatarId = htmlElement.id;
+
+// Store the selected avatar in local storage
+localStorage.setItem('selectedAvatar', htmlElement.src);
+    });
+    return selectedAvatar
+  }
+updateUINotesContainer()
+function handleSubmit (){
+  let avatar = selectedAvatar
+  if(avatar == null)
+    {
+      alert('Please select an Avatar')
+    }
+    else{
+      return true;
+    }
+}
+function signIn(){
+   
+    let ValidInput = handleSubmit()
+    if(ValidInput==true)
+      window.location.href = "index.html"
+    
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    // Retrieve username from local storage
+    let username = localStorage.getItem('username');
+    
+    // Retrieve selected avatar from local storage
+    let selectedAvatarSrc = localStorage.getItem('selectedAvatar');
+
+    // Do something with the retrieved information
+    console.log('Username:', username);
+    console.log('Selected Avatar:', selectedAvatarSrc);})
   </script>
 </body>
 
